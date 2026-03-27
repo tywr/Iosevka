@@ -52,19 +52,17 @@ glyph-block Letter-Latin-Lower-E : begin
 
 	define [SmallEFlatHookTerminalShape df stroke] : begin
 		local hd : FlatHookDepth df
-		local xTerminal : Math.max (df.leftSB + hd.x + TINY) : mix df.rightSB df.leftSB (1 / 5)
 		return : list
 			arcvh.superness DesignParameters.tightHookSuperness
 			flat (df.leftSB + hd.x) 0 [heading Rightward]
-			curl xTerminal 0
+			curl (df.rightSB - [HSwToV : 0.5 * stroke]) 0
 
 	define [RevSmallEFlatHookTerminalShape df stroke] : begin
 		local hd : FlatHookDepth df
-		local xTerminal : Math.min (df.rightSB - hd.x - TINY) : mix df.leftSB df.rightSB (1 / 5)
 		return : list
 			arcvh.superness DesignParameters.tightHookSuperness
 			flat (df.rightSB - hd.x) 0 [heading Leftward]
-			curl xTerminal 0
+			curl (df.leftSB + [HSwToV : 0.5 * stroke]) 0
 
 	define flex-params [SmallEShape] : glyph-proc
 		local-parameter : df

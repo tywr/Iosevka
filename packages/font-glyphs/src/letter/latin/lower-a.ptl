@@ -34,9 +34,8 @@ glyph-block Letter-Latin-Lower-A : begin
 					2 : InwardSlabArcStart.LtrRhs df.leftSB XH stroke AHook
 					3 : begin
 						local hd : FlatHookDepth df
-						local xTerminal : Math.max (df.leftSB - hd.x) : mix df.rightSB df.leftSB (4 / 5)
 						list
-							flat xTerminal XH
+							flat (df.leftSB + [HSwToV : 0.5 * stroke]) XH
 							curl [arch.adjust-x.top [mix df.leftSB df.rightSB 0.5] stroke] XH [heading Rightward]
 							archv.superness DesignParameters.tightHookSuperness
 				flat df.rightSB [Math.max (XH - [ADoubleStoreySmoothB df]) (y0 + TINY)]
