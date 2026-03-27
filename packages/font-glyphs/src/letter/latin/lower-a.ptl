@@ -11,7 +11,7 @@ glyph-block Letter-Latin-Lower-A : begin
 	glyph-block-import Letter-Shared : CreateAccentedComposition CreateMultiAccentedComposition CreateTurnedLetter
 	glyph-block-import Letter-Shared-Shapes : SerifFrame OBarRight ArcStartSerif
 	glyph-block-import Letter-Shared-Shapes : RightwardTailedBar RetroflexHook
-	glyph-block-import Letter-Shared-Shapes : InwardSlabArcStart
+	glyph-block-import Letter-Shared-Shapes : InwardSlabArcStart FlatHookDepth
 
 	glyph-block-export DoubleStorey
 	define DoubleStorey : namespace
@@ -32,12 +32,19 @@ glyph-block Letter-Latin-Lower-A : begin
 						g4 df.leftSB (XH - AHook)
 						hookstart XH (sw -- stroke)
 					2 : InwardSlabArcStart.LtrRhs df.leftSB XH stroke AHook
+					3 : begin
+						local hd : FlatHookDepth df
+						local xTerminal : Math.max (df.leftSB - hd.x) : mix df.rightSB df.leftSB (4 / 5)
+						list
+							flat xTerminal XH
+							curl [arch.adjust-x.top [mix df.leftSB df.rightSB 0.5] stroke] XH [heading Rightward]
+							archv.superness DesignParameters.tightHookSuperness
 				flat df.rightSB [Math.max (XH - [ADoubleStoreySmoothB df]) (y0 + TINY)]
 				[if isMask corner curl] df.rightSB y0 [heading Downward]
 				if isMask { [corner df.leftSB y0] } {}
 
 		export : define [HookAndBar df hookStyle y0 _stroke] : glyph-proc
-			if ((hookStyle != 1) && (hookStyle != 2)) : throw : new Error "Invalid hookStyle"
+			if ((hookStyle != 1) && (hookStyle != 2) && (hookStyle != 3)) : throw : new Error "Invalid hookStyle"
 			local sw : fallback _stroke : ADoubleStoreyStroke df
 			include : ADoubleStoreyHookAndBarT dispiro df hookStyle y0 sw
 			if (hookStyle == 2) : include : ArcStartSerif.InwardL df.leftSB XH sw AHook
@@ -118,6 +125,11 @@ glyph-block Letter-Latin-Lower-A : begin
 		doubleStoreyHookInwardSerifedTailed           { DoubleStorey.Tailed           (RightSB + SideJut) 2 }
 		doubleStoreyHookInwardSerifedToothlessCorner  { DoubleStorey.ToothlessCorner   nothing            2 }
 		doubleStoreyHookInwardSerifedToothlessRounded { DoubleStorey.ToothlessRounded  nothing            2 }
+		doubleStoreyFlatHookSerifless                 { DoubleStorey.Serifless         RightSB            3 }
+		doubleStoreyFlatHookSerifed                   { DoubleStorey.Serifed          (RightSB + SideJut) 3 }
+		doubleStoreyFlatHookTailed                    { DoubleStorey.Tailed           (RightSB + SideJut) 3 }
+		doubleStoreyFlatHookToothlessCorner           { DoubleStorey.ToothlessCorner   nothing            3 }
+		doubleStoreyFlatHookToothlessRounded          { DoubleStorey.ToothlessRounded  nothing            3 }
 
 	foreach { suffix { body xTrailing hookStyle } } [Object.entries DoubleStoreyConfig] : do
 		create-glyph "a.\(suffix)" : glyph-proc

@@ -2269,6 +2269,21 @@ selectorAffix."aRetroflexHook/singleStorey/autoSerifed/slab" = ""
 selectorAffix."aRetroflexHook/singleStorey/autoSerifed/sans" = ""
 selectorAffix."ae/a" = "hookInwardSerifed"
 
+[prime.a.variants-buildup.stages.double-storey-hook.flat-hook]
+rank = 3
+keyAffix = "flat-hook"
+descriptionAffix = "flat top hook"
+selectorAffix.a = "flatHook"
+selectorAffix."a/sansSerif" = "flatHook"
+selectorAffix."aRetroflexHook" = "flatHook"
+selectorAffix."a/doubleStorey" = "flatHook"
+selectorAffix."aRetroflexHook/doubleStorey" = "flatHook"
+selectorAffix."a/singleStorey/autoSerifed/slab" = ""
+selectorAffix."a/singleStorey/autoSerifed/sans" = ""
+selectorAffix."aRetroflexHook/singleStorey/autoSerifed/slab" = ""
+selectorAffix."aRetroflexHook/singleStorey/autoSerifed/sans" = ""
+selectorAffix."ae/a" = "flatHook"
+
 [prime.a.variants-buildup.stages.ear."*"]
 next = "bar"
 

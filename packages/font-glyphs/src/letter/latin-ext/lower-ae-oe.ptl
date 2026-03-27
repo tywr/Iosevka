@@ -43,6 +43,11 @@ glyph-block Letter-Latin-Lower-AE-OE : begin
 			doubleStoreyHookInwardSerifedTailed           { DoubleStorey.Tailed            2 }
 			doubleStoreyHookInwardSerifedToothlessCorner  { DoubleStorey.ToothlessCorner   2 }
 			doubleStoreyHookInwardSerifedToothlessRounded { DoubleStorey.ToothlessRounded  2 }
+			doubleStoreyFlatHookSerifless                 { DoubleStorey.Serifless         3 }
+			doubleStoreyFlatHookSerifed                   { DoubleStorey.Serifed           3 }
+			doubleStoreyFlatHookTailed                    { DoubleStorey.Tailed            3 }
+			doubleStoreyFlatHookToothlessCorner           { DoubleStorey.ToothlessCorner   3 }
+			doubleStoreyFlatHookToothlessRounded          { DoubleStorey.ToothlessRounded  3 }
 
 		foreach { suffix { bodyR hookStyle } } [Object.entries DoubleStoreyConfig] : do
 
