@@ -2747,6 +2747,18 @@ description = "`e` with more rounded shape"
 selector.e = "rounded"
 selector.eCap = "flatCrossbar"
 
+[prime.e.variants.flat-crossbar-flat-hook]
+rank = 3
+description = "`e` with flat crossbar and flat hook"
+selector.e = "flatCrossbarFlatHook"
+selector.eCap = "flatCrossbar"
+
+[prime.e.variants.rounded-flat-hook]
+rank = 4
+description = "`e` with more rounded shape and flat hook"
+selector.e = "roundedFlatHook"
+selector.eCap = "flatCrossbar"
+
 
 
 [prime.f]

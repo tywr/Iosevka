@@ -165,7 +165,7 @@ glyph-block Letter-Cyrillic-Iotified-A : begin
 	do "iotified e"
 		glyph-block-import Letter-Latin-Lower-E : SmallEConfig
 
-		foreach { suffix { body revbody } } [Object.entries SmallEConfig] : do
+		foreach { suffix { body revbody fFlatHook } } [Object.entries SmallEConfig] : do
 			create-glyph "latn/eIotified.\(suffix)" : glyph-proc
 				define df : include : DivFrame para.advanceScaleM 3
 				include : df.markSet.e

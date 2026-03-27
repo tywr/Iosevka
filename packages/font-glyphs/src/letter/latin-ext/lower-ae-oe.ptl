@@ -131,7 +131,7 @@ glyph-block Letter-Latin-Lower-AE-OE : begin
 					adb    -- subDf.smallArchDepthB
 					turned -- true
 
-		foreach { suffix { body revbody } } [Object.entries SmallEConfig] : do
+		foreach { suffix { body revbody fFlatHook } } [Object.entries SmallEConfig] : do
 			create-glyph "ae/e.\(suffix)" : glyph-proc
 				local df : DivFrame para.advanceScaleMM 3
 				set-width 0

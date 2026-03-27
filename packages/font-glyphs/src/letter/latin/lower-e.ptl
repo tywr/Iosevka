@@ -50,6 +50,22 @@ glyph-block Letter-Latin-Lower-E : begin
 		[Just SLAB-INWARD]    : ArcEndSerif.InwardL df.leftSB 0 stroke hook
 		__                    : no-shape
 
+	define [SmallEFlatHookTerminalShape df stroke] : begin
+		local hd : FlatHookDepth df
+		local xTerminal : Math.max (df.leftSB + hd.x + TINY) : mix df.rightSB df.leftSB (1 / 5)
+		return : list
+			arcvh.superness DesignParameters.tightHookSuperness
+			flat (df.leftSB + hd.x) 0 [heading Rightward]
+			curl xTerminal 0
+
+	define [RevSmallEFlatHookTerminalShape df stroke] : begin
+		local hd : FlatHookDepth df
+		local xTerminal : Math.min (df.rightSB - hd.x - TINY) : mix df.leftSB df.rightSB (1 / 5)
+		return : list
+			arcvh.superness DesignParameters.tightHookSuperness
+			flat (df.rightSB - hd.x) 0 [heading Leftward]
+			curl xTerminal 0
+
 	define flex-params [SmallEShape] : glyph-proc
 		local-parameter : df
 		local-parameter : top
@@ -61,6 +77,7 @@ glyph-block Letter-Latin-Lower-E : begin
 		local-parameter : turned   -- false
 		local-parameter : styTop   -- nothing
 		local-parameter : styBot   -- nothing
+		local-parameter : flatHook -- false
 
 		local tailSlab : if turned styTop styBot
 		local cw : turned && (tailSlab != nothing)
@@ -74,9 +91,9 @@ glyph-block Letter-Latin-Lower-E : begin
 			curl (df.rightSB - OX) [Math.max (top - adb) (yBarBottom + TINY)]
 			arch.lhs top (sw -- stroke)
 			flatside.ld df.leftSB 0 top ada adb
-			SmallESerifedTerminalShape df top stroke hook tailSlab cw
+			if flatHook [SmallEFlatHookTerminalShape df stroke] [SmallESerifedTerminalShape df top stroke hook tailSlab cw]
 
-		include : SmallETerminalSerif df top stroke hook tailSlab cw
+		if [not flatHook] : include : SmallETerminalSerif df top stroke hook tailSlab cw
 
 		if turned : include : FlipAround df.middle (top / 2)
 
@@ -92,6 +109,7 @@ glyph-block Letter-Latin-Lower-E : begin
 		local-parameter : turned   -- false
 		local-parameter : styTop   -- nothing
 		local-parameter : styBot   -- nothing
+		local-parameter : flatHook -- false
 
 		local tailSlab : if turned styTop styBot
 		local ccw : turned && (tailSlab != nothing)
@@ -105,9 +123,9 @@ glyph-block Letter-Latin-Lower-E : begin
 			curl (df.leftSB + OX) [Math.max (top - ada) (yBarBottom + TINY)]
 			arch.rhs top (sw -- stroke)
 			flatside.rd df.rightSB 0 top ada adb
-			RevSmallESerifedTerminalShape df top stroke hook tailSlab ccw
+			if flatHook [RevSmallEFlatHookTerminalShape df stroke] [RevSmallESerifedTerminalShape df top stroke hook tailSlab ccw]
 
-		include : RevSmallETerminalSerif df top stroke hook tailSlab ccw
+		if [not flatHook] : include : RevSmallETerminalSerif df top stroke hook tailSlab ccw
 
 		if turned : include : FlipAround df.middle (top / 2)
 
@@ -121,6 +139,7 @@ glyph-block Letter-Latin-Lower-E : begin
 		local-parameter : turned   -- false
 		local-parameter : styTop   -- nothing
 		local-parameter : styBot   -- nothing
+		local-parameter : flatHook -- false
 
 		local tailSlab : if turned styTop styBot
 		local cw : turned && (tailSlab != nothing)
@@ -138,9 +157,9 @@ glyph-block Letter-Latin-Lower-E : begin
 			g4 ((df.rightSB - OX) - 0.5 * (df.width / HalfUPM) * extraCurliness) [YSmoothMidR top yBarBottom ada2 adb2]
 			arch.lhs top (sw -- stroke)
 			flatside.ld df.leftSB 0 top ada adb
-			SmallESerifedTerminalShape df top stroke hook tailSlab cw
+			if flatHook [SmallEFlatHookTerminalShape df stroke] [SmallESerifedTerminalShape df top stroke hook tailSlab cw]
 
-		include : SmallETerminalSerif df top stroke hook tailSlab cw
+		if [not flatHook] : include : SmallETerminalSerif df top stroke hook tailSlab cw
 
 		if turned : include : FlipAround df.middle (top / 2)
 
@@ -156,6 +175,7 @@ glyph-block Letter-Latin-Lower-E : begin
 		local-parameter : turned   -- false
 		local-parameter : styTop   -- nothing
 		local-parameter : styBot   -- nothing
+		local-parameter : flatHook -- false
 
 		local tailSlab : if turned styTop styBot
 		local ccw : turned && (tailSlab != nothing)
@@ -173,9 +193,9 @@ glyph-block Letter-Latin-Lower-E : begin
 			g4 (df.leftSB + OX) [YSmoothMidL top yBarBottom ada2 adb2]
 			arch.rhs top (sw -- stroke)
 			flatside.rd df.rightSB 0 top ada adb
-			RevSmallESerifedTerminalShape df top stroke hook tailSlab ccw
+			if flatHook [RevSmallEFlatHookTerminalShape df stroke] [RevSmallESerifedTerminalShape df top stroke hook tailSlab ccw]
 
-		include : RevSmallETerminalSerif df top stroke hook tailSlab ccw
+		if [not flatHook] : include : RevSmallETerminalSerif df top stroke hook tailSlab ccw
 
 		if turned : include : FlipAround df.middle (top / 2)
 
@@ -221,23 +241,27 @@ glyph-block Letter-Latin-Lower-E : begin
 
 	glyph-block-export SmallEConfig
 	define SmallEConfig : object
-		flatCrossbar { SmallEShape        RevSmallEShape        }
-		rounded      { SmallERoundedShape RevSmallERoundedShape }
+		flatCrossbar         { SmallEShape        RevSmallEShape        false }
+		rounded              { SmallERoundedShape RevSmallERoundedShape false }
+		flatCrossbarFlatHook { SmallEShape        RevSmallEShape        true  }
+		roundedFlatHook      { SmallERoundedShape RevSmallERoundedShape true  }
 
-	foreach { suffix { Body RevBody } } [Object.entries SmallEConfig] : do
+	foreach { suffix { Body RevBody fFlatHook } } [Object.entries SmallEConfig] : do
 		create-glyph "e.\(suffix)" : glyph-proc
 			include : MarkSet.e
 			include : Body [DivFrame 1] XH
-				hook -- AHook
-				ada  -- SmallArchDepthA
-				adb  -- SmallArchDepthB
+				hook     -- AHook
+				ada      -- SmallArchDepthA
+				adb      -- SmallArchDepthB
+				flatHook -- fFlatHook
 
 		create-glyph "eOgonek.\(suffix)" : glyph-proc
 			include : MarkSet.e
 			local lastKnot : include : Body [DivFrame 1] XH
-				hook -- AHook
-				ada  -- SmallArchDepthA
-				adb  -- SmallArchDepthB
+				hook     -- AHook
+				ada      -- SmallArchDepthA
+				adb      -- SmallArchDepthB
+				flatHook -- fFlatHook
 			include : refer-glyph 'ogonekTR/spacer'
 
 			# Connected Ogonek shape
@@ -272,9 +296,10 @@ glyph-block Letter-Latin-Lower-E : begin
 		create-glyph "eNotch.\(suffix)" : glyph-proc
 			include : MarkSet.e
 			local lastKnot : include : Body [DivFrame 1] XH
-				hook -- AHook
-				ada  -- SmallArchDepthA
-				adb  -- SmallArchDepthB
+				hook     -- AHook
+				ada      -- SmallArchDepthA
+				adb      -- SmallArchDepthB
+				flatHook -- fFlatHook
 			local sw : AdviceStroke 4
 			local ry : Math.min (lastKnot.y - sw) [mix 0 XH 0.08]
 			local rx : Math.min ry
@@ -300,9 +325,10 @@ glyph-block Letter-Latin-Lower-E : begin
 		create-glyph "reve.\(suffix)" : glyph-proc
 			include : MarkSet.e
 			include : RevBody [DivFrame 1] XH
-				hook -- AHook
-				ada  -- SmallArchDepthA
-				adb  -- SmallArchDepthB
+				hook     -- AHook
+				ada      -- SmallArchDepthA
+				adb      -- SmallArchDepthB
+				flatHook -- fFlatHook
 
 		create-glyph "eBar.\(suffix)" : glyph-proc
 			include [refer-glyph "e.\(suffix)"] AS_BASE ALSO_METRICS
