@@ -100,7 +100,7 @@ glyph-block Letter-Latin-Lower-G : begin
 		export : define [BentHook df y0 _ada _adb] : BentHookT dispiro df y0 0 df.mvs _ada _adb
 		export : define [FlatHook df y0 _ada _adb] : begin
 			local hd : FlatHookDepth df (9 / 8)
-			local xTerminal : Math.min (df.rightSB - hd.x - TINY) : mix df.leftSB df.rightSB (1 / 5)
+			local xTerminal : Math.min (df.rightSB - hd.x - TINY) (df.leftSB + [HSwToV : 0.3 * df.mvs])
 			return : dispiro
 				widths.rhs df.mvs
 				flat df.rightSB y0 [heading Downward]
